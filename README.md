@@ -1,6 +1,7 @@
 # チャットアプリ
 Ruby on RailsとVue.jsを使ったリアルタイムチャットアプリ
-RailsはAPIモード利用
+
+リアルタイムチャット機能は、Ruby on Railsの機能の一つである「Action Cable」を利用
 
 # 使用技術
 - Ruby 2.7.1
