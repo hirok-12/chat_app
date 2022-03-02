@@ -1,5 +1,5 @@
 <template>
-  <router-view/>
+  <div>チャットルームです</div>
 </template>
 
 <script>
