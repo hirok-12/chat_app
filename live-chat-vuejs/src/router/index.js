@@ -18,7 +18,7 @@ const noRequireAuth = async (to, from, next) => {
   await validate()
 
   if (!error.value) {
-    next({ name: 'Chatroom' })
+    next({ name: 'ChatRoom' })
   } else {
     next()
   }
