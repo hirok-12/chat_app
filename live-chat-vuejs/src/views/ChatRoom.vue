@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <NavBar />
-    <ChatWindow :messages="messages" />
+    <ChatWindow @connectCable="connectCable" :messages="messages" />
     <NewChatForm @connectCable="connectCable" />
   </div>
 </template>
@@ -47,6 +47,7 @@ export default {
     }
   },
   mounted() {
+    console.log("呼ばれた")
     // Ruby on RailsのAction Cableとコネクションを確立
     // ws://[サーバ側のURL]:3000/cable
     const cable = ActionCable.createConsumer('ws://localhost:3000/cable')
