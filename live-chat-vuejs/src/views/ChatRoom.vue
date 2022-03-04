@@ -1,14 +1,67 @@
 <template>
   <div class="container">
     <NavBar />
+    <ChatWindow :messages="messages" />
+    <NewChatForm @connectCable="connectCable" />
   </div>
 </template>
 
 <script>
 import NavBar from '../components/NavBar'
+import ChatWindow from '../components/ChatWindow'
+import NewChatForm from '../components/NewChatForm'
+import axios from 'axios'
+import ActionCable from 'actioncable'
 
 export default {
-  components: { NavBar },
+  components: { NavBar, ChatWindow, NewChatForm },
+  data () {
+    return {
+      messages: [],
+    }
+  },
+  methods: {
+    async getMessages () {
+      try {
+        const res = await axios.get('http://localhost:3000/messages', {
+          headers: {
+            uid: window.localStorage.getItem('uid'),
+            "access-token": window.localStorage.getItem('access-token'),
+            client:window.localStorage.getItem('client')
+          }
+        })
+        if (!res) {
+          new Error('メッセージ一覧を取得できませんでした')
+        }
+        this.messages = res.data
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    connectCable (message) {
+      // Ruby on RailsのAction Cable部分のreceiveメソッド呼び出し
+      this.messageChannel.perform('receive', {
+        message: message,
+        email: window.localStorage.getItem('uid')
+      })
+    }
+  },
+  mounted() {
+    // Ruby on RailsのAction Cableとコネクションを確立
+    // ws://[サーバ側のURL]:3000/cable
+    const cable = ActionCable.createConsumer('ws://localhost:3000/cable')
+    this.messageChannel = cable.subscriptions.create('RoomChannel', {
+      connected: () => {
+        this.getMessages()
+      },
+      received: () => {
+        this.getMessages()
+      }
+    })
+  },
+  beforeUnmount () {
+    this.messageChannel.unsubscribe()
+  }
 }
 </script>
 
