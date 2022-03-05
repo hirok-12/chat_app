@@ -11,6 +11,7 @@
               <span class="heart-count">{{ message.likes.length }}</span>
             </div>
           </div>
+
           <span class="created-at">{{ message.created_at }}前</span>
         </li>
       </ul>
@@ -161,6 +162,12 @@ ul li {
   bottom: -7px;
   right: 0px;
   font-size: 9px;
+}
+.heart {
+  color: rgb(236, 29, 29);
+}
+.heart-count {
+  color: rgb(20, 19, 19);
 }
 .received .message::selection {
   background: #eee;
